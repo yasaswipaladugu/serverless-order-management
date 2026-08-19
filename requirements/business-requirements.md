@@ -39,8 +39,7 @@ Each stage represents a real-world business event.
 - SHIPPED means the order has been dispatched to the customer.
 - DELIVERED means the order has been received by the customer. This is a final state.
 - CANCELLED means the order has been cancelled. This is a final state.
-
-- The normal progression is:
+The normal progression is:
 PENDING → CONFIRMED → PROCESSING → SHIPPED → DELIVERED
 
 ## 4. Cancellation Rules
