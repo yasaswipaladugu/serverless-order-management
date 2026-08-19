@@ -14,19 +14,69 @@ lifecycle of customer orders — from creation through to delivery or cancellati
 The new system must:
 1. Allow an order to be created.
 2. Assign a unique order identifier.
-Store order information persistently.
-Allow authorized users to retrieve an order.
-Allow authorized users to retrieve multiple orders.
-Allow order status to be updated.
-Prevent invalid order-state transitions.
-Allow appropriate orders to be cancelled.
-Validate incoming requests.
-Handle errors gracefully.
-Automatically scale as request volume increases.
-Avoid continuously running application servers.
-Protect order data from unauthorized access.
-Provide logging and monitoring.
-Keep the architecture simple and cost-conscious.
-Support infrastructure management through Terraform.
-Be suitable for implementation as a small AWS project.
+3. Store order information persistently.
+4. Allow authorized users to retrieve an order.
+5. Allow authorized users to retrieve multiple orders.
+6. Allow order status to be updated.
+7. Prevent invalid order-state transitions.
+8. Allow appropriate orders to be cancelled.
+9. Validate incoming requests.
+10. Handle errors gracefully.
+11. Automatically scale as request volume increases.
+12. Avoid continuously running application servers.
+13. Protect order data from unauthorized access.
+14. Provide logging and monitoring.
+15. Keep the architecture simple and cost-conscious.
+16. Support infrastructure management through Terraform.
+
+## 3. Order Lifecycle
+
+An order at OrderFlow GmbH moves through a defined set of stages.
+Each stage represents a real-world business event.
+
+PENDING means the order has been received but not yet reviewed.
+
+CONFIRMED means the order has been reviewed and accepted for fulfillment.
+
+PROCESSING means the order is being prepared for shipment.
+
+SHIPPED means the order has been dispatched to the customer.
+
+DELIVERED means the order has been received by the customer. This is a final state.
+
+CANCELLED means the order has been cancelled. This is a final state.
+
+The normal progression is:
+PENDING → CONFIRMED → PROCESSING → SHIPPED → DELIVERED
+
+## 4. Cancellation Rules
+
+Not every order can be cancelled. The following rules apply:
+
+An order in PENDING status can be cancelled because it has not yet been accepted.
+
+An order in CONFIRMED status can be cancelled because preparation has not yet started.
+
+An order in PROCESSING status cannot be cancelled because preparation has already begun.
+
+An order in SHIPPED status cannot be cancelled because it is already in transit.
+
+An order in DELIVERED status cannot be cancelled because it has already been completed.
+
+An order that is already CANCELLED cannot be cancelled again.
+
+## 5. Invalid Transitions
+
+The system must reject any attempt to move an order into an invalid state.
+
+DELIVERED cannot transition to any other status because it is a final state.
+
+CANCELLED cannot transition to any other status because it is a final state.
+
+SHIPPED cannot transition to CANCELLED because the order is already in transit.
+
+PROCESSING cannot transition to CANCELLED because preparation has already started.
+
+No order can move backward through the lifecycle.
+For example, CONFIRMED cannot go back to PENDING.
 
