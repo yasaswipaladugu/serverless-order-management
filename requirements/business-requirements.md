@@ -33,50 +33,33 @@ The new system must:
 
 An order at OrderFlow GmbH moves through a defined set of stages.
 Each stage represents a real-world business event.
+- PENDING means the order has been received but not yet reviewed.
+- CONFIRMED means the order has been reviewed and accepted for fulfillment.
+- PROCESSING means the order is being prepared for shipment.
+- SHIPPED means the order has been dispatched to the customer.
+- DELIVERED means the order has been received by the customer. This is a final state.
+- CANCELLED means the order has been cancelled. This is a final state.
 
-PENDING means the order has been received but not yet reviewed.
-
-CONFIRMED means the order has been reviewed and accepted for fulfillment.
-
-PROCESSING means the order is being prepared for shipment.
-
-SHIPPED means the order has been dispatched to the customer.
-
-DELIVERED means the order has been received by the customer. This is a final state.
-
-CANCELLED means the order has been cancelled. This is a final state.
-
-The normal progression is:
+- The normal progression is:
 PENDING → CONFIRMED → PROCESSING → SHIPPED → DELIVERED
 
 ## 4. Cancellation Rules
 
 Not every order can be cancelled. The following rules apply:
-
-An order in PENDING status can be cancelled because it has not yet been accepted.
-
-An order in CONFIRMED status can be cancelled because preparation has not yet started.
-
-An order in PROCESSING status cannot be cancelled because preparation has already begun.
-
-An order in SHIPPED status cannot be cancelled because it is already in transit.
-
-An order in DELIVERED status cannot be cancelled because it has already been completed.
-
-An order that is already CANCELLED cannot be cancelled again.
+1. An order in PENDING status can be cancelled because it has not yet been accepted.
+2. An order in CONFIRMED status can be cancelled because preparation has not yet started.
+3. An order in PROCESSING status cannot be cancelled because preparation has already begun.
+4. An order in SHIPPED status cannot be cancelled because it is already in transit.
+5. An order in DELIVERED status cannot be cancelled because it has already been completed.
+6. An order that is already CANCELLED cannot be cancelled again.
 
 ## 5. Invalid Transitions
 
 The system must reject any attempt to move an order into an invalid state.
-
-DELIVERED cannot transition to any other status because it is a final state.
-
-CANCELLED cannot transition to any other status because it is a final state.
-
-SHIPPED cannot transition to CANCELLED because the order is already in transit.
-
-PROCESSING cannot transition to CANCELLED because preparation has already started.
-
+- DELIVERED cannot transition to any other status because it is a final state.
+- CANCELLED cannot transition to any other status because it is a final state.
+- SHIPPED cannot transition to CANCELLED because the order is already in transit.
+- PROCESSING cannot transition to CANCELLED because preparation has already started.
 No order can move backward through the lifecycle.
-For example, CONFIRMED cannot go back to PENDING.
+- For example, CONFIRMED cannot go back to PENDING.
 
