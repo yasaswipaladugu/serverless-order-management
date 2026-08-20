@@ -39,8 +39,8 @@ Each stage represents a real-world business event.
 - SHIPPED means the order has been dispatched to the customer.
 - DELIVERED means the order has been received by the customer. This is a final state.
 - CANCELLED means the order has been cancelled. This is a final state.
-The normal progression is:
-PENDING → CONFIRMED → PROCESSING → SHIPPED → DELIVERED
+- The normal progression is:
+ PENDING → CONFIRMED → PROCESSING → SHIPPED → DELIVERED
 
 ## 4. Cancellation Rules
 
@@ -59,6 +59,6 @@ The system must reject any attempt to move an order into an invalid state.
 - CANCELLED cannot transition to any other status because it is a final state.
 - SHIPPED cannot transition to CANCELLED because the order is already in transit.
 - PROCESSING cannot transition to CANCELLED because preparation has already started.
-No order can move backward through the lifecycle.
-- For example, CONFIRMED cannot go back to PENDING.
+- No order can move backward through the lifecycle.
+For example, CONFIRMED cannot go back to PENDING.
 
