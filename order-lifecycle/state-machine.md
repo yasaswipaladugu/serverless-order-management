@@ -43,18 +43,14 @@ This is a final state. No further transitions are possible.
 ## 3. State Diagram
 
 The following diagram shows all valid transitions between states.
-                [ PENDING ]
-                /         \
-               /           \
-              v             v
-       [ CONFIRMED ]   [ CANCELLED ]
-       /         \
-      /           \
-     v             v
-[ PROCESSING ] [ CANCELLED ]
-|
-v
-[ SHIPPED ]
-|
-v
-[ DELIVERED ]
+```mermaid
+flowchart TD
+    P[PENDING] --> C[CONFIRMED]
+    P --> X[CANCELLED]
+
+    C --> PR[PROCESSING]
+    C --> X
+
+    PR --> S[SHIPPED]
+    S --> D[DELIVERED]
+```
