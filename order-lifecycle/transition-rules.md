@@ -69,14 +69,16 @@ The allowed transitions are represented in the Lambda function as a dictionary
 where the key is the current status and the value is a list of statuses
 that the order is allowed to move to from that current status.
 
+```python
 ALLOWED_TRANSITIONS = {
-    "PENDING":     ["CONFIRMED", "CANCELLED"],
-    "CONFIRMED":   ["PROCESSING", "CANCELLED"],
-    "PROCESSING":  ["SHIPPED"],
-    "SHIPPED":     ["DELIVERED"],
-    "DELIVERED":   [],
-    "CANCELLED":   []
+    "PENDING": ["CONFIRMED", "CANCELLED"],
+    "CONFIRMED": ["PROCESSING", "CANCELLED"],
+    "PROCESSING": ["SHIPPED"],
+    "SHIPPED": ["DELIVERED"],
+    "DELIVERED": [],
+    "CANCELLED": []
 }
+```
 
 When a status update request arrives, the Lambda function:
 
