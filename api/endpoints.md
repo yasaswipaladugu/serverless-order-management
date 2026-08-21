@@ -28,6 +28,7 @@ Purpose:  Creates a new order and stores it in DynamoDB with status PENDING.
 
 Request body:
 
+```json
 {
   "customerId": "C1001",
   "items": [
@@ -38,6 +39,7 @@ Request body:
   ],
   "totalAmount": 49.98
 }
+```
 
 Field descriptions:
 
@@ -54,6 +56,7 @@ The caller does not provide these fields.
 
 Success response — HTTP 201 Created:
 
+```json
 {
   "orderId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
   "customerId": "C1001",
@@ -68,6 +71,7 @@ Success response — HTTP 201 Created:
   "createdAt": "2025-06-03T10:00:00Z",
   "updatedAt": "2025-06-03T10:00:00Z"
 }
+```
 
 Error responses:
 
@@ -89,6 +93,7 @@ Request body: none
 
 Success response — HTTP 200 OK:
 
+```json
 {
   "orderId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
   "customerId": "C1001",
@@ -103,6 +108,7 @@ Success response — HTTP 200 OK:
   "createdAt": "2025-06-03T10:00:00Z",
   "updatedAt": "2025-06-03T10:05:00Z"
 }
+```
 
 Error responses:
 
@@ -128,6 +134,7 @@ passing it in the next request retrieves the next page of results.
 
 Success response — HTTP 200 OK:
 
+```json
 {
   "orders": [
     {
@@ -149,6 +156,7 @@ Success response — HTTP 200 OK:
   ],
   "nextToken": "eyJvcmRlcklkIjogInh4eHgifQ=="
 }
+```
 
 If there are no more pages, nextToken will not be present in the response.
 
@@ -170,9 +178,11 @@ orderId is required. It is the UUID of the order to update.
 
 Request body:
 
+```json
 {
   "status": "CONFIRMED"
 }
+```
 
 The status field is required. It must be one of the defined valid statuses:
 PENDING, CONFIRMED, PROCESSING, SHIPPED, DELIVERED, CANCELLED.
@@ -182,6 +192,7 @@ requested status is allowed according to the business rules.
 
 Success response — HTTP 200 OK:
 
+```json
 {
   "orderId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
   "customerId": "C1001",
@@ -196,6 +207,7 @@ Success response — HTTP 200 OK:
   "createdAt": "2025-06-03T10:00:00Z",
   "updatedAt": "2025-06-03T10:05:00Z"
 }
+```
 
 Error responses:
 
@@ -205,9 +217,11 @@ HTTP 409 — if the requested transition is not allowed by the business rules.
 
 Example HTTP 409 response body:
 
+```json
 {
   "error": "Invalid state transition: SHIPPED cannot be transitioned to CANCELLED"
 }
+```
 
 ---
 
