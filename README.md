@@ -1,4 +1,4 @@
-# OrderFlow GmbH — AWS Serverless Order Management System
+# OrderFlow GmbH (AWS Serverless Order Management System)
 
 A fully serverless order management backend built on AWS, designed as a 4-week final project for my Cloud and AWS training program at DCI.
 
@@ -17,8 +17,8 @@ This project demonstrates the complete journey from business requirements to a p
                   │
                   ▼
         ┌─────────────────┐
-        │  API Gateway     │   (HTTP API)
-        │  (eu-central-1)  │
+        │  API Gateway    │   (HTTP API)
+        │  (eu-central-1) │
         └────────┬────────┘
                  │
      ┌───────────┼───────────┐
@@ -28,17 +28,17 @@ This project demonstrates the complete journey from business requirements to a p
  │ Order  │ │ Order  │ │ Status │
  │ Lambda │ │ Lambda │ │ Lambda │
  └───┬────┘ └───┬────┘ └───┬────┘
-     │           │           │
-     └───────────┼───────────┘
+     │           │         │
+     └───────────┼─────────┘
                  ▼
         ┌─────────────────┐
-        │    DynamoDB      │
-        │  (orders table)  │
+        │    DynamoDB     │
+        │  (orders table) │
         └────────┬────────┘
                  ▼
         ┌─────────────────┐
-        │   CloudWatch     │
-        │  (Logs & Alarms) │
+        │   CloudWatch    │
+        │  (Logs & Alarms)│
         └─────────────────┘
 ```
 
@@ -272,8 +272,8 @@ Every order moves through a defined lifecycle. The system **enforces** valid tra
 
 ```
               ┌────────────┐
-              │   PENDING   │
-              └──┬───────┬──┘
+              │   PENDING  │
+              └──┬───────┬─┘
                  │       │
           ┌──────▼──┐    │
           │CONFIRMED│    │
@@ -289,7 +289,7 @@ Every order moves through a defined lifecycle. The system **enforces** valid tra
      └───┬────┘   │      │
          │        │      │
    ┌─────▼─────┐  │      │
-   │ DELIVERED  │  │      │
+   │ DELIVERED │  │      │
    └───────────┘  │      │
                   ▼      ▼
             ┌───────────┐
