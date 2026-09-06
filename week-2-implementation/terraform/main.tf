@@ -239,3 +239,126 @@ resource "aws_lambda_function" "update_status" {
     ManagedBy = "Terraform"
   }
 }
+
+
+# API GATEWAY — HTTP API
+
+
+resource "aws_apigatewayv2_api" "orderflow_api" {
+  name          = "${var.project_name}-api"   # e.g. "orderflow-api"
+  protocol_type = "HTTP"                      # HTTP API (not REST API)
+
+  # CORS allows browsers to call your API from different domains.
+  # "$default" means allow all origins — fine for a dev/learning project.
+  cors_configuration {
+    allow_origins = ["*"]
+    allow_methods = ["GET", "POST", "PATCH", "OPTIONS"]
+    allow_headers = ["Content-Type"]
+  }
+}
+
+
+# API STAGE
+
+
+resource "aws_apigatewayv2_stage" "default" {
+  api_id      = aws_apigatewayv2_api.orderflow_api.id
+  name        = "$default"
+  auto_deploy = true   # Automatically deploy changes — no manual deploys needed
+}
+
+
+
+# INTEGRATIONS — Connect API Gateway to Lambda
+
+
+# Integration for create_order Lambda
+resource "aws_apigatewayv2_integration" "create_order" {
+  api_id             = aws_apigatewayv2_api.orderflow_api.id
+  integration_type   = "AWS_PROXY"  # Proxy means: forward the full request to Lambda as-is
+  integration_uri    = aws_lambda_function.create_order.invoke_arn
+  payload_format_version = "2.0"    # Version 2.0 = modern format, matches our Lambda code
+}
+
+# Integration for read_order Lambda (handles both GET /orders and GET /orders/{orderId})
+resource "aws_apigatewayv2_integration" "read_order" {
+  api_id             = aws_apigatewayv2_api.orderflow_api.id
+  integration_type   = "AWS_PROXY"
+  integration_uri    = aws_lambda_function.read_order.invoke_arn
+  payload_format_version = "2.0"
+}
+
+# Integration for update_status Lambda
+resource "aws_apigatewayv2_integration" "update_status" {
+  api_id             = aws_apigatewayv2_api.orderflow_api.id
+  integration_type   = "AWS_PROXY"
+  integration_uri    = aws_lambda_function.update_status.invoke_arn
+  payload_format_version = "2.0"
+}
+
+
+
+# ROUTES — Map HTTP methods + paths to integrations
+
+
+# POST /orders → create_order Lambda
+resource "aws_apigatewayv2_route" "create_order" {
+  api_id    = aws_apigatewayv2_api.orderflow_api.id
+  route_key = "POST /orders"
+  target    = "integrations/${aws_apigatewayv2_integration.create_order.id}"
+}
+
+# GET /orders/{orderId} → read_order Lambda
+
+resource "aws_apigatewayv2_route" "get_order" {
+  api_id    = aws_apigatewayv2_api.orderflow_api.id
+  route_key = "GET /orders/{orderId}"
+  target    = "integrations/${aws_apigatewayv2_integration.read_order.id}"
+}
+
+# GET /orders → read_order Lambda (same Lambda, different route)
+resource "aws_apigatewayv2_route" "list_orders" {
+  api_id    = aws_apigatewayv2_api.orderflow_api.id
+  route_key = "GET /orders"
+  target    = "integrations/${aws_apigatewayv2_integration.read_order.id}"
+}
+
+# PATCH /orders/{orderId}/status → update_status Lambda
+resource "aws_apigatewayv2_route" "update_status" {
+  api_id    = aws_apigatewayv2_api.orderflow_api.id
+  route_key = "PATCH /orders/{orderId}/status"
+  target    = "integrations/${aws_apigatewayv2_integration.update_status.id}"
+}
+
+
+# LAMBDA PERMISSIONS — Allow API Gateway to invoke each Lambda
+
+
+# Permission for create_order
+resource "aws_lambda_permission" "apigw_create_order" {
+  statement_id  = "AllowAPIGatewayInvokeCreate"
+  action        = "lambda:InvokeFunction"               # What permission we're granting
+  function_name = aws_lambda_function.create_order.function_name
+  principal     = "apigateway.amazonaws.com"            # Who we're granting it to
+  source_arn    = "${aws_apigatewayv2_api.orderflow_api.execution_arn}/*/*"
+  # The source_arn restricts: only THIS API Gateway can invoke this Lambda
+  # The /*/*  means: any stage, any route — keeps it flexible
+}
+
+# Permission for read_order
+resource "aws_lambda_permission" "apigw_read_order" {
+  statement_id  = "AllowAPIGatewayInvokeRead"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.read_order.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.orderflow_api.execution_arn}/*/*"
+}
+
+# Permission for update_status
+resource "aws_lambda_permission" "apigw_update_status" {
+  statement_id  = "AllowAPIGatewayInvokeUpdate"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.update_status.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.orderflow_api.execution_arn}/*/*"
+}
