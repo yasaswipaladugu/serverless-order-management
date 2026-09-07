@@ -57,7 +57,7 @@ This project demonstrates the complete journey from business requirements to a p
 
 ## AWS Architecture Diagram of the Prototype
 
-week-1-design/aws_architecture_diagram.png
+![AWS Architecture Diagram](./week-1-design/aws_architecture_diagram.png)
 
 
 ---
