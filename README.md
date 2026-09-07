@@ -55,6 +55,13 @@ This project demonstrates the complete journey from business requirements to a p
 
 ---
 
+## AWS Architecture Diagram of the Prototype
+
+week-1-design/aws_architecture_diagram.png
+
+
+---
+
 ## Prerequisites
 
 Before deploying this project, you need the following installed and configured on your machine:
