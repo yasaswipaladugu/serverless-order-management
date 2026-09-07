@@ -104,12 +104,12 @@ This project is designed to stay within the **AWS Free Tier**. The services used
 ```
 serverless-order-management/
 │
-├── README.md                          ← You are here
-├── demo.ps1                           ← PowerShell script to run all 7 API tests
+├── README.md                         
+├── demo.ps1                           
 ├── .gitignore
 ├── LICENSE
 │
-├── week-1-design/                     ← Requirements, API design & data modeling
+├── week-1-design/                     
 │   ├── business-requirements.md
 │   ├── technical-requirements.md
 │   ├── assumptions.md
@@ -124,22 +124,22 @@ serverless-order-management/
 │   ├── request-flow.md
 │   └── test-cases.md
 │
-├── week-2-implementation/             ← Terraform IaC + Lambda functions
+├── week-2-implementation/             
 │   ├── terraform/
-│   │   ├── main.tf                    ← All AWS resources (API GW, Lambda, DynamoDB, IAM)
-│   │   ├── variables.tf               ← Configurable parameters
-│   │   └── outputs.tf                 ← Prints API URL after deploy
+│   │   ├── main.tf                    
+│   │   ├── variables.tf               
+│   │   └── outputs.tf                 
 │   └── lambda/
-│       ├── create_order/handler.py    ← POST /orders
-│       ├── read_order/handler.py      ← GET /orders & GET /orders/{orderId}
-│       └── update_status/handler.py   ← PATCH /orders/{orderId}/status
+│       ├── create_order/handler.py    
+│       ├── read_order/handler.py      
+│       └── update_status/handler.py   
 │
-├── week-3-security-monitoring/        ← Security review, monitoring & reliability
+├── week-3-security-monitoring/        
 │   ├── iam-design.md
 │   ├── monitoring-design.md
 │   └── consistency-and-failure-handling.md
 │
-└── week-4-finalization/               ← Networking, DR, cost & Well-Architected review
+└── week-4-finalization/              
     ├── networking-design.md
     ├── disaster-recovery.md
     ├── cost-analysis.md
